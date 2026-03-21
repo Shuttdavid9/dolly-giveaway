@@ -1,0 +1,8 @@
+{
+  "name": "dolly-giveaway-netlify",
+  "version": "1.0.0",
+  "description": "Dolly Parton Giveaway with Google Sheets",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

