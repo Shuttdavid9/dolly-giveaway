@@ -407,11 +407,32 @@
     // Background images setup
     function initSlidingBg() {
         const track = document.getElementById('bgTrack');
-        for(let i = 0; i < 12; i++) {
-            let slide = document.createElement('div');
-            slide.className = 'bg-slide';
-            slide.style.background = 'linear-gradient(135deg,#5f3e4a,#2e1a24)';
-            track.appendChild(slide);
+        if(!track) return;
+        track.innerHTML = '';
+        
+        // Your Dolly Parton images
+        const dollyImages = [
+            "/images/1.jpg",
+            "/images/2.jpg",
+            "/images/3.jpg",
+            "/images/4.jpg",
+            "/images/5.jpg"
+        ];
+        
+        // Create multiple copies for seamless scrolling
+        for(let repeat = 0; repeat < 6; repeat++) {
+            for(let i = 0; i < dollyImages.length; i++) {
+                let slide = document.createElement('div');
+                slide.className = 'bg-slide';
+                slide.style.backgroundImage = `url('${dollyImages[i]}')`;
+                slide.style.backgroundSize = 'cover';
+                slide.style.backgroundPosition = 'center';
+                // Error handling - if image fails to load, show gradient
+                slide.onerror = function() {
+                    this.style.background = 'linear-gradient(135deg,#5f3e4a,#2e1a24)';
+                };
+                track.appendChild(slide);
+            }
         }
     }
     window.addEventListener('load', initSlidingBg);
