@@ -580,30 +580,27 @@
                 payload.receipt = base64Receipt;
             }
             
-            // Send to Google Sheets
-            const response = await fetch('https://script.google.com/macros/s/AKfycbwFKieQv4He0NJ4ljzDIu9nnB6ZH0GrShwdxZq9o_g9nlGrZ5SqtWNkVIjQhY6ZFTis/exec', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-            
-            const result = await response.json();
-            
-            if(result.success) {
-                const successDiv = document.getElementById('finalSuccessMsg');
-                successDiv.style.display = 'block';
-                successDiv.innerHTML = `
-                    <i class="fas fa-check-circle"></i> 
-                    🎉 SUCCESS, ${formData.fullName}!<br>
-                    Your entry has been submitted with your photo!<br>
-                    <strong>Tracking Number:</strong> ${generatedTracking}<br>
-                    We'll contact you at ${formData.email}
-                `;
-                successDiv.scrollIntoView({ behavior: 'smooth' });
-                
+// Send to Google Sheets with no-cors mode
+const response = await fetch('https://script.google.com/macros/s/AKfycbwFKieQv4He0NJ4ljzDIu9nnB6ZH0GrShwdxZq9o_g9nlGrZ5SqtWNkVIjQhY6ZFTis/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+});
+
+// With no-cors, we can't read the response, so assume success
+const successDiv = document.getElementById('finalSuccessMsg');
+successDiv.style.display = 'block';
+successDiv.innerHTML = `
+    <i class="fas fa-check-circle"></i> 
+    🎉 SUCCESS, ${formData.fullName}!<br>
+    Your entry has been submitted!<br>
+    <strong>Tracking Number:</strong> ${generatedTracking}<br>
+    We'll contact you at ${formData.email}
+`;
+successDiv.scrollIntoView({ behavior: 'smooth' });                
                 // Reset form after 3 seconds
                 setTimeout(() => {
                     document.getElementById('mainGiveawayForm').reset();
